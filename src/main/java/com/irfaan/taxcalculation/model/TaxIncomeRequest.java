@@ -26,9 +26,7 @@ public class TaxIncomeRequest {
     @Positive
     private long basicSalary;
 
-    private long telecomAllowance;
+    private Map<String, Long> deductibleIncome;
 
-    private long deduction;
-
-    private Map<String,String> otherEarningDeductible;
+    private Map<String, Long> nonDeductibleIncome;
 }

@@ -3,6 +3,7 @@ package com.irfaan.taxcalculation.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author irfaanhibatullah
@@ -11,10 +12,9 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
 public class TaxIncomeResult extends BaseResult {
 
-    private long taxIncome;
+    private double taxIncome;
 
     private String codeCurrency;
 }
