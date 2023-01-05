@@ -2,6 +2,6 @@ package com.irfaan.taxcalculation.strategy;
 
 public interface TaxStrategy {
 
-    long calculateBasedNationality(String gender, long incomePerMonth, String maritalStatus, long nonDeductibleEarning);
+    double calculateBasedNationality(String gender, double incomePerMonth, String maritalStatus, double nonDeductibleEarning);
 
 }

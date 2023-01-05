@@ -2,7 +2,6 @@ package com.irfaan.taxcalculation.configs;
 
 import com.irfaan.taxcalculation.enums.NonTaxableIncomeEnum;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,27 +11,28 @@ import java.util.Map;
  */
 public class TaxIncomeConfig {
 
-    private static final Map<NonTaxableIncomeEnum, Long> configsOfNonTaxableIncomeConfig = new LinkedHashMap<>();
+    private static final Map<NonTaxableIncomeEnum, Double> configsOfNonTaxableIncomeConfig = new LinkedHashMap<>();
 
-    private static final Map<Double, Long> percentTaxConfig = new LinkedHashMap<>();
+    private static final Map<Double, Double> percentTaxConfig = new LinkedHashMap<>();
 
     static {
-        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.TK_O, 54_000_000L);
-        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_0, 58_500_000L);
-        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_1, 63_000_000L);
-        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_2, 67_000_000L);
-        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_3, 72_000_000L);
-        percentTaxConfig.put(0.05, 50_000_000L);
-        percentTaxConfig.put(0.15, 250_000_000L);
-        percentTaxConfig.put(0.25, 500_000_000L);
-        percentTaxConfig.put(0.30, 500_000_000L);
+        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.TK_O, 54_000_000.0);
+        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_0, 58_500_000.0);
+        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_1, 63_000_000.0);
+        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_2, 67_000_000.0);
+        configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_3, 72_000_000.0);
+        percentTaxConfig.put(0.05, 50_000_000.0);
+        percentTaxConfig.put(0.15, 250_000_000.0);
+        percentTaxConfig.put(0.25, 500_000_000.0);
+        percentTaxConfig.put(0.30, 5_000_000_000.0);
+        percentTaxConfig.put(0.35, 5_000_000_000.0);
     }
 
-    public static long getAmountOfNonTaxableIncome(NonTaxableIncomeEnum nonTaxableIncomeEnum) {
-        return configsOfNonTaxableIncomeConfig.getOrDefault(nonTaxableIncomeEnum, 0L);
+    public static double getAmountOfNonTaxableIncome(NonTaxableIncomeEnum nonTaxableIncomeEnum) {
+        return configsOfNonTaxableIncomeConfig.getOrDefault(nonTaxableIncomeEnum, 0.0);
     }
 
-    public static Map<Double, Long> getPercentTaxConfig() {
+    public static Map<Double, Double> getPercentTaxConfig() {
         return percentTaxConfig;
     }
 

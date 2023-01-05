@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 @AllArgsConstructor
@@ -32,17 +31,21 @@ public class CalculateTaxServiceImpl implements CalculateTaxService {
             throw new TaxAppException("Not valid for request nationality", HttpStatus.BAD_REQUEST);
         }
         TaxIncomeResult taxIncomeResult = new TaxIncomeResult();
-        AtomicLong totalNonDeductibleIncome = new AtomicLong();
-        request.getNonDeductibleIncome().forEach((k, v) -> totalNonDeductibleIncome.set(totalNonDeductibleIncome.get() + v));
-        long incomePerMonth = request.getBasicSalary() + totalNonDeductibleIncome.get();
+        double totalNonDeductibleIncome = 0.0;
+        for (Map.Entry<String, String> entry : request.getNonDeductibleIncome().entrySet()) {
+            totalNonDeductibleIncome += Double.parseDouble(entry.getValue());
+        }
+        double incomePerMonth = Double.parseDouble(request.getBasicSalary()) + totalNonDeductibleIncome;
 
-        AtomicLong totalDeductibleIncome = new AtomicLong();
-        request.getDeductibleIncome().forEach((k, v) -> totalDeductibleIncome.set(totalDeductibleIncome.get() + v));
+        double totalDeductibleIncome = 0.0;
+        for (Map.Entry<String, String> entry : request.getDeductibleIncome().entrySet()) {
+            totalDeductibleIncome += Double.parseDouble(entry.getValue());
+        }
 
-        long totalTax = taxStrategy.calculateBasedNationality(request.getGender(), incomePerMonth, request.getMaritalStatus(), totalDeductibleIncome.get());
+        double totalTax = taxStrategy.calculateBasedNationality(request.getGender(), incomePerMonth, request.getMaritalStatus(), totalDeductibleIncome);
 
         taxIncomeResult.setStatus(StatusResultEnum.SUCCESS.getCode());
-        taxIncomeResult.setTaxIncome(String.valueOf(totalTax));
+        taxIncomeResult.setTaxIncome(String.format("%.2f", totalTax));
         taxIncomeResult.setStatusCode(String.valueOf(HttpStatus.OK.value()));
         taxIncomeResult.setCodeCurrency(request.getNationality());
         taxIncomeResult.setMessage("success calculate tax");

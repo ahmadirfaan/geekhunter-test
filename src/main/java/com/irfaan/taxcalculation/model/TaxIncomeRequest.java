@@ -24,9 +24,9 @@ public class TaxIncomeRequest {
     private String nationality;
 
     @Positive
-    private long basicSalary;
+    private String basicSalary;
 
-    private Map<String, Long> deductibleIncome;
+    private Map<String, String> deductibleIncome;
 
-    private Map<String, Long> nonDeductibleIncome;
+    private Map<String, String> nonDeductibleIncome;
 }

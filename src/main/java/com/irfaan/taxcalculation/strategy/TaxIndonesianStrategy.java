@@ -13,29 +13,33 @@ public class TaxIndonesianStrategy implements TaxStrategy {
 
 
     @Override
-    public long calculateBasedNationality(String gender, long incomePerMonth, String maritalStatus, long nonDeductibleEarning) {
+    public double calculateBasedNationality(String gender, double incomePerMonth, String maritalStatus, double nonDeductibleEarning) {
         NonTaxableIncomeEnum nonTaxableIncomeEnum = NonTaxableIncomeEnum.getEnumByCode(maritalStatus);
         if (nonTaxableIncomeEnum != null) {
-            long amountOfNonTaxableIncome = TaxIncomeConfig.getAmountOfNonTaxableIncome(nonTaxableIncomeEnum);
+            double amountOfNonTaxableIncome = TaxIncomeConfig.getAmountOfNonTaxableIncome(nonTaxableIncomeEnum);
 
             //multiply basicSalary for a year
-            long incomePerYear = incomePerMonth * 12;
-            long totalNonDeductibleEarning = nonDeductibleEarning * 12;
+            double incomePerYear = incomePerMonth * 12;
+            double totalNonDeductibleEarning = nonDeductibleEarning * 12;
             //incomePerYear minus non taxable income
-            long netto = incomePerYear - amountOfNonTaxableIncome - totalNonDeductibleEarning;
+            double netto = incomePerYear - amountOfNonTaxableIncome - totalNonDeductibleEarning;
             double result = 0.0;
-            Map<Double, Long> percentTaxConfig = TaxIncomeConfig.getPercentTaxConfig();
-            for (Map.Entry<Double, Long> doubleLongEntry : percentTaxConfig.entrySet()) {
+            Map<Double, Double> percentTaxConfig = TaxIncomeConfig.getPercentTaxConfig();
+            for (Map.Entry<Double, Double> doubleLongEntry : percentTaxConfig.entrySet()) {
                 if (netto > 0) {
-                    Double key = doubleLongEntry.getKey();
-                    long value = doubleLongEntry.getValue();
-                    double deductionTaxLayer = key * netto;
-                    result += deductionTaxLayer;
+                    double key = doubleLongEntry.getKey();
+                    double value = doubleLongEntry.getValue();
+                    if(netto < value || key == 0.35) {
+                        result += (netto * key);
+                    } else {
+                        result += (value * key);
+
+                    }
                     netto = netto - value;
                 }
             }
 
-            return (long) result / 12;
+            return result / 12;
         }
 
         return 0;
