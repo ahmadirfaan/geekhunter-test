@@ -24,4 +24,13 @@ public enum NonTaxableIncomeEnum {
     private final String code;
 
     private final String description;
+
+    public static NonTaxableIncomeEnum getEnumByCode(String code) {
+        for (NonTaxableIncomeEnum nonTaxableIncomeEnum: values()) {
+            if (nonTaxableIncomeEnum.code.equals(code)) {
+                return nonTaxableIncomeEnum;
+            }
+        }
+        return null;
+    }
 }

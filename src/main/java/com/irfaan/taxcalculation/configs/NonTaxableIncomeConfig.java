@@ -1,6 +1,7 @@
 package com.irfaan.taxcalculation.configs;
 
 import com.irfaan.taxcalculation.enums.NonTaxableIncomeEnum;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class NonTaxableIncomeConfig {
         configsOfNonTaxableIncomeConfig.put(NonTaxableIncomeEnum.K_3, 72_000_000L);
     }
 
-    public long getAmountOfNonTaxableIncome(NonTaxableIncomeEnum nonTaxableIncomeEnum) {
+    public static long getAmountOfNonTaxableIncome(NonTaxableIncomeEnum nonTaxableIncomeEnum) {
         return configsOfNonTaxableIncomeConfig.getOrDefault(nonTaxableIncomeEnum, 0L);
     }
 

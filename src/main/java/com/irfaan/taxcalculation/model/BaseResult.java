@@ -1,5 +1,6 @@
 package com.irfaan.taxcalculation.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -15,4 +16,6 @@ public class BaseResult {
     private String message;
 
     private String status;
+
+    private String statusCode;
 }
