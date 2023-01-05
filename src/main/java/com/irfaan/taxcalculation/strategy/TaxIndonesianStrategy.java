@@ -20,9 +20,9 @@ public class TaxIndonesianStrategy implements TaxStrategy {
 
             //multiply basicSalary for a year
             long incomePerYear = incomePerMonth * 12;
-
+            long totalNonDeductibleEarning = nonDeductibleEarning * 12;
             //incomePerYear minus non taxable income
-            long netto = incomePerYear - amountOfNonTaxableIncome;
+            long netto = incomePerYear - amountOfNonTaxableIncome - totalNonDeductibleEarning;
             double result = 0.0;
             Map<Double, Long> percentTaxConfig = TaxIncomeConfig.getPercentTaxConfig();
             for (Map.Entry<Double, Long> doubleLongEntry : percentTaxConfig.entrySet()) {
@@ -35,7 +35,7 @@ public class TaxIndonesianStrategy implements TaxStrategy {
                 }
             }
 
-            return (long) result;
+            return (long) result / 12;
         }
 
         return 0;

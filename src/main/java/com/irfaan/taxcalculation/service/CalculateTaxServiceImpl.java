@@ -18,14 +18,16 @@ import java.util.concurrent.atomic.AtomicLong;
 @AllArgsConstructor
 public class CalculateTaxServiceImpl implements CalculateTaxService {
 
-
     private Map<String, TaxStrategy> taxStrategyMap;
+
+    private Map<String, String> pairOfBeansName;
 
 
     @Override
     public TaxIncomeResult calculateTaxFromIncome(TaxIncomeRequest request) throws TaxAppException {
         checkAllValidEnumRequest(request.getGender(), request.getMaritalStatus());
-        TaxStrategy taxStrategy = taxStrategyMap.get(request.getNationality());
+        String taxStrategyName = pairOfBeansName.get(request.getNationality());
+        TaxStrategy taxStrategy = taxStrategyMap.get(taxStrategyName);
         if (taxStrategy == null) {
             throw new TaxAppException("Not valid for request nationality", HttpStatus.BAD_REQUEST);
         }
@@ -35,13 +37,13 @@ public class CalculateTaxServiceImpl implements CalculateTaxService {
         long incomePerMonth = request.getBasicSalary() + totalNonDeductibleIncome.get();
 
         AtomicLong totalDeductibleIncome = new AtomicLong();
-        request.getNonDeductibleIncome().forEach((k, v) -> totalDeductibleIncome.set(totalDeductibleIncome.get() + v));
+        request.getDeductibleIncome().forEach((k, v) -> totalDeductibleIncome.set(totalDeductibleIncome.get() + v));
 
         long totalTax = taxStrategy.calculateBasedNationality(request.getGender(), incomePerMonth, request.getMaritalStatus(), totalDeductibleIncome.get());
 
         taxIncomeResult.setStatus(StatusResultEnum.SUCCESS.getCode());
-        taxIncomeResult.setTaxIncome(totalTax);
-        taxIncomeResult.setStatus(String.valueOf(HttpStatus.OK.value()));
+        taxIncomeResult.setTaxIncome(String.valueOf(totalTax));
+        taxIncomeResult.setStatusCode(String.valueOf(HttpStatus.OK.value()));
         taxIncomeResult.setCodeCurrency(request.getNationality());
         taxIncomeResult.setMessage("success calculate tax");
         return taxIncomeResult;

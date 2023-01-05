@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: Tax-Calculation
+server:
+  port: 8080
