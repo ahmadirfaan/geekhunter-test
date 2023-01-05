@@ -1,7 +1,3 @@
-/**
- * DANA
- * Copyright (c) 2018‐2023 All Rights Reserved.
- */
 package com.irfaan.taxcalculation.enums;
 
 import lombok.AllArgsConstructor;
