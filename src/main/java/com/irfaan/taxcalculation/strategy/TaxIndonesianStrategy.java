@@ -13,7 +13,7 @@ public class TaxIndonesianStrategy implements TaxStrategy {
 
 
     @Override
-    public double calculateBasedNationality(String gender, double incomePerMonth, String maritalStatus, double nonDeductibleEarning) {
+    public double calculateBasedNationality(double incomePerMonth, String maritalStatus, double nonDeductibleEarning) {
         NonTaxableIncomeEnum nonTaxableIncomeEnum = NonTaxableIncomeEnum.getEnumByCode(maritalStatus);
         if (nonTaxableIncomeEnum != null) {
             double amountOfNonTaxableIncome = TaxIncomeConfig.getAmountOfNonTaxableIncome(nonTaxableIncomeEnum);
@@ -24,12 +24,12 @@ public class TaxIndonesianStrategy implements TaxStrategy {
             //incomePerYear minus non taxable income
             double netto = incomePerYear - amountOfNonTaxableIncome - totalNonDeductibleEarning;
             double result = 0.0;
-            Map<Double, Double> percentTaxConfig = TaxIncomeConfig.getPercentTaxConfig();
+            Map<Double, Double> percentTaxConfig = TaxIncomeConfig.getPercentTaxConfigIdr();
             for (Map.Entry<Double, Double> doubleLongEntry : percentTaxConfig.entrySet()) {
                 if (netto > 0) {
                     double key = doubleLongEntry.getKey();
                     double value = doubleLongEntry.getValue();
-                    if(netto < value || key == 0.35) {
+                    if(netto < value) {
                         result += (netto * key);
                     } else {
                         result += (value * key);

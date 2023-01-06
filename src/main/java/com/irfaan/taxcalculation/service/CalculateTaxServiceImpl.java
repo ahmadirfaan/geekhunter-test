@@ -7,26 +7,26 @@ import com.irfaan.taxcalculation.exceptions.TaxAppException;
 import com.irfaan.taxcalculation.model.TaxIncomeRequest;
 import com.irfaan.taxcalculation.model.TaxIncomeResult;
 import com.irfaan.taxcalculation.strategy.TaxStrategy;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
-@AllArgsConstructor
 public class CalculateTaxServiceImpl implements CalculateTaxService {
 
-    private Map<String, TaxStrategy> taxStrategyMap;
+    private final Map<String, TaxStrategy> taxStrategyMap;
 
-    private Map<String, String> pairOfBeansName;
-
+    public CalculateTaxServiceImpl(@Qualifier(value = "taxStrategyHashMap")
+                                   Map<String, TaxStrategy> taxStrategyMap) {
+        this.taxStrategyMap = taxStrategyMap;
+    }
 
     @Override
     public TaxIncomeResult calculateTaxFromIncome(TaxIncomeRequest request) throws TaxAppException {
         checkAllValidEnumRequest(request.getGender(), request.getMaritalStatus());
-        String taxStrategyName = pairOfBeansName.get(request.getNationality());
-        TaxStrategy taxStrategy = taxStrategyMap.get(taxStrategyName);
+        TaxStrategy taxStrategy = taxStrategyMap.get(request.getNationality());
         if (taxStrategy == null) {
             throw new TaxAppException("Not valid for request nationality", HttpStatus.BAD_REQUEST);
         }
@@ -42,7 +42,7 @@ public class CalculateTaxServiceImpl implements CalculateTaxService {
             totalDeductibleIncome += Double.parseDouble(entry.getValue());
         }
 
-        double totalTax = taxStrategy.calculateBasedNationality(request.getGender(), incomePerMonth, request.getMaritalStatus(), totalDeductibleIncome);
+        double totalTax = taxStrategy.calculateBasedNationality(incomePerMonth, request.getMaritalStatus(), totalDeductibleIncome);
 
         taxIncomeResult.setStatus(StatusResultEnum.SUCCESS.getCode());
         taxIncomeResult.setTaxIncome(String.format("%.2f", totalTax));
