@@ -34,7 +34,7 @@ public class TaxIncomeConfig {
         percentTaxConfigVnd.put(0.20, 32_000_000.0);
         percentTaxConfigVnd.put(0.25, 52_000_000.0);
         percentTaxConfigVnd.put(0.30, 80_000_000.0);
-        percentTaxConfigVnd.put(0.35, 80_000_000.0);
+        percentTaxConfigVnd.put(0.35, Double.MAX_VALUE);
     }
 
     private TaxIncomeConfig() {

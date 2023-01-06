@@ -20,8 +20,7 @@ class CalculateTaxServiceImplTest {
     @Autowired
     private CalculateTaxService calculateTaxService;
 
-    @Test
-    void testCalculationTaxIndonesian() {
+    private TaxIncomeRequest getTaxIncomeRequest() {
         TaxIncomeRequest request = new TaxIncomeRequest();
         request.setGender("MALE");
         request.setNationality("IDR");
@@ -29,6 +28,12 @@ class CalculateTaxServiceImplTest {
         request.setBasicSalary("10500000");
         request.setDeductibleIncome(new HashMap<>());
         request.setNonDeductibleIncome(new HashMap<>());
+        return request;
+    }
+
+    @Test
+    void testCalculationTaxIndonesian() {
+        TaxIncomeRequest request = getTaxIncomeRequest();
 
         //if tax income from value then must be
         double taxResult = 5_800_000.00 / 12;
@@ -42,5 +47,21 @@ class CalculateTaxServiceImplTest {
         }
     }
 
+    @Test
+    void testCalculationTaxVietnam() {
+        TaxIncomeRequest request = getTaxIncomeRequest();
+        request.setNationality("VND");
+
+        //if tax income from value then must be
+        double taxResult = 44_100_000.0 / 12;
+        String stringTax = String.format("%.2f", taxResult);
+        try {
+            TaxIncomeResult taxIncomeResult = calculateTaxService.calculateTaxFromIncome(request);
+            Assertions.assertEquals("VND", taxIncomeResult.getCodeCurrency());
+            Assertions.assertEquals(stringTax, taxIncomeResult.getTaxIncome());
+        } catch (TaxAppException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

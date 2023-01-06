@@ -21,6 +21,6 @@ public class TaxVietnamStrategy implements TaxStrategy {
             }
         });
 
-        return (percentTax.get() * incomePerYear) / 2;
+        return (percentTax.get() * incomePerYear) / 12;
     }
 }
