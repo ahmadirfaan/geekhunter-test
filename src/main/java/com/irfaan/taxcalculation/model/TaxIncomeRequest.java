@@ -1,9 +1,9 @@
 package com.irfaan.taxcalculation.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.Map;
 
 /**
